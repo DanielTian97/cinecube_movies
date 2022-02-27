@@ -18,6 +18,8 @@ def get_movies(request):
     
     url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + TMDB_KEY + "&language=en-US&page=1"
     
+    clear_database()
+    
     response = requests.get(url)
     data = response.json()
     movies = data['results']
@@ -71,3 +73,9 @@ def read_tmdb_key():
         raise KeyError('tmdb key not found')
     
     return TMDB_KEY
+
+def clear_database():
+    if Category.objects.all():
+        for cat in Category.objects.all():
+            print(cat.genre + " deleted")
+            Category.objects.filter(genre = cat.genre).delete()
